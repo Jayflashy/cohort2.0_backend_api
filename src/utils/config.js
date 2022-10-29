@@ -6,5 +6,6 @@
     PORT: process.env.PORT,
     HOST: process.env.HOST,
     DBURL: process.env.DBURL,
-    JWTSECRET: process.env.JWTSECRET
+    JWTSECRET: process.env.JWTSECRET,
+    MAILGUN_API_KEY: process.env.MAILGUN_API_KEY
 }

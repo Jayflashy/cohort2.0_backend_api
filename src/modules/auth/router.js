@@ -1,6 +1,8 @@
 const authRouter = require('express').Router()
-const { signup } = require('./controller')
+const { signup, verifyMail, signin } = require('./controller')
 
-authRouter.post('/signup', signup)
+authRouter.post('/auth/signup', signup)
+authRouter.post('/auth/signin', signin)
+authRouter.post('/auth/verify/:link', verifyMail)
 
 module.exports = authRouter
