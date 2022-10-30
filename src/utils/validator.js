@@ -3,16 +3,16 @@ const Joi = require('joi')
 
 exports.validator = async (data, schema) => {
     try {
-        let value = await schema.validate(data)
+        let value = await schema.validateAsync(data)
         return{
             isValid : true,
             value
         }
     }
-    catch (err) {
+    catch (error) {
        return {
         isValid: false,
-        err
+        error
        }
     }
 }

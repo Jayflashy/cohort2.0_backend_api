@@ -20,6 +20,7 @@ module.exports = {
             if (!data.isValid){
                 throw data.error
             }
+            console.log(data)
 
             // check if user exists
             let userExists = await Auth.getUser(email)
@@ -49,7 +50,8 @@ module.exports = {
             
         } 
         catch (err) {
-            res.status(401).json(err.message)
+            console.log(err)
+            res.status(400).json({error: err.message})
         }
 
     },
@@ -67,7 +69,8 @@ module.exports = {
             
             //update account status
             let { email } = user
-            await Auth.updateUser({ email }, {status: "active"})
+            let updated =  await Auth.updateUser({ email }, {status: "active"})
+            console.log(updated)
 
             res.status(200).json({
                 message: "Account verified"
@@ -93,6 +96,8 @@ module.exports = {
             if (!data.isValid){
                 throw data.error
             }
+
+            console.log(data)
 
             //check user credentials
             user = await Auth.getUser(email)
