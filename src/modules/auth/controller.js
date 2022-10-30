@@ -1,34 +1,30 @@
 const Auth  = require('./model')
-const validator = require('../../utils/validator')
-const { authValidatorSchema } = require('./schema')
-const { generateToken, generateEmailVerificationLink, verifyLink } = require('../../utils/token')
+const { validator } = require('../../utils/validator')
+const { authValidatorSchema, emailValidatorSchema, passwordValidatorSchema } = require('./schema')
+const { generateToken, generateEmailVerificationLink, generatePasswordResetLink, verifyLink } = require('../../utils/token')
 const { hashPassword, comparePasswords } = require('../../utils/hasher')
-const { alwaysValidSchema } = require('ajv/dist/compile/util')
 const  MailService  = require('./mailService')
 
 module.exports = {
     
+    //user signup handler
     signup: async (req, res) => {
         let { email , password } = req.body
 
         try {
             email = email.toLowerCase()
-            let user = { email, password}
+            let user = { email, password }
 
             //validate user inputs
-            // let isValid = await validator(user, authValidatorSchema)
-            // console.log(isValid)
-            // if (!isValid){
-            //     err = isValid.errors
-            //     console.log("this validator error")
-            //     console.log(err)
-            //     throw err
-            // }
+            let data = await validator(user, authValidatorSchema)
+            if (!data.isValid){
+                throw data.error
+            }
 
             // check if user exists
-            let userExists = await Auth.get(email)
+            let userExists = await Auth.getUser(email)
             if (userExists){
-            throw new Error("User already exists")
+                throw new Error("User already exists")
             }
 
             //hash password
@@ -36,20 +32,19 @@ module.exports = {
             user.password = hashedPassword
             
             //save details to database
-            user = await Auth.create(user)
+            user = await Auth.createUser(user)
 
             //generate verification email
             let verificationLink = await generateEmailVerificationLink(user)
-            console.log(`verification mail :  ${verificationLink}`)
             let mailData = {
                 to: user.email,
                 verificationLink
             }
-            let mail = await MailService.sendVerificationMail(mailData)
+            await MailService.sendVerificationMail(mailData)
             
             //send success message
             res.status(200).json({
-                message: "Verification mail sent successfully"
+                success: "Verification mail sent successfully"
             })
             
         } 
@@ -64,14 +59,15 @@ module.exports = {
         let verificationLink = req.params.link
 
         try {
-            user = await verifyLink(verificationLink)
+            let user = await verifyLink(verificationLink)
             console.log(user)//log
             if(!user){
                 throw new Error("Link expired")
             }
+            
+            //update account status
             let { email } = user
-            console.log(email)//log
-            await Auth.update(email, {status: "active"})
+            await Auth.updateUser({ email }, {status: "active"})
 
             res.status(200).json({
                 message: "Account verified"
@@ -93,22 +89,21 @@ module.exports = {
             let user = { email, password}
 
             //validate user inputs
-            let isValid = validator(user, authValidatorSchema)
-            if (!isValid){
-                err = validate.errors
-                throw err
+            let data = await validator(user, authValidatorSchema)
+            if (!data.isValid){
+                throw data.error
             }
 
             //check user credentials
-            user = await Auth.get(email)
+            user = await Auth.getUser(email)
             if (!user){
-                throw new Error("Wrong email or email combination")
+                throw new Error("Wrong password or email combination")
             }
 
             let hashedPassword = user.password
             let compared = await comparePasswords(password, hashedPassword)
             if(!compared){
-                throw new Error("Wrong email or email combination")
+                throw new Error("Wrong password or email combination")
             }
 
             //filter result from db
@@ -121,7 +116,7 @@ module.exports = {
             let token = generateToken(user)
 
             res.cookie("jwt", token, {
-                maxAge: 3600 * 1000,//1hr
+                maxAge: 3600 * 24 * 10 * 1000, // 10 days
                 secure: true,
                 httpOnly: true
             })
@@ -129,13 +124,89 @@ module.exports = {
 
 
         } catch (err) {
-            res.status(401).json({
+            res.status(400).json({
                 error: err.message
             })
         }
     },
 
     signout: async(req, res) => {
-        
+        //clear cookies
+        res.clearCookie('jwt')
+    },
+
+    forgetPassword: async(req, res) => {
+        let { email } = req.body
+
+        try {
+            //validate user inputs
+            let data = await validator(user, emailValidatorSchema)
+            if (!data.isValid){
+                throw data.error
+            }
+
+            //find email on the db
+            let user = await Auth.getUser(email)
+
+            //filter user object
+            user = {
+                id: user._id,
+                email: user.email
+            }
+            //generate password reset email
+            let passwordResetLink = await generatePasswordResetLink(user)
+            let mailData = {
+                to: user.email,
+                passwordResetLink
+            }
+            await MailService.sendPasswordResetMail(mailData)
+
+            res.status(200).json({
+                success: "Password reset link sent..."
+            })
+
+        } catch (err) {
+            res.status(400).json({
+                error: err.message
+            })
+        }
+    },
+
+    resetPassword: async(req, res) => {
+        let passwordResetLink = req.params.link
+        let { password } = req.body
+
+        try {
+            //verify password reset link
+            let user = await verifyLink(passwordResetLink)
+            console.log(user)//log
+            if(!user){
+                throw  new Error("Link expired")
+            }
+            let { email } = user
+
+            //validate user inputs
+            let data = await validator(user, passwordValidatorSchema)
+            if (!data.isValid){
+                throw data.error
+            }
+
+            //hash new password
+            let hashedPassword = await hashPassword(password)
+
+            //update and save new password
+            await Auth.updateUser(email, { password: hashedPassword })
+
+            res.status(200).json({
+                success: "password reset successful"
+            })
+
+
+        } 
+        catch (err) {
+            res.status(400).json({
+                error: err.message
+            })
+        }
     }
 }

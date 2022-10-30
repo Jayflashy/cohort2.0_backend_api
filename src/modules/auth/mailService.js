@@ -18,8 +18,8 @@
 //             to: content.to,
 //             subject: "Verify Your Email",
 //             template: "medbookly_signup",
-//             "h:X-Mailgun-Variables": JSON.stringify({ // be sure to stringify your payload
-//                 firstName: content.verificationLink,
+//             "h:X-Mailgun-Variables": JSON.stringify({ 
+//                 verificationLink: content.verificationLink,
 //               } || ""),
 //             'h:Reply-To': 'office@boltcliq.com',
 //           })
@@ -35,7 +35,9 @@
 //Delete the dummy codes and umcomment the above codes to
 //make the actual Mail service active
 
-async function mailer (data) {
+
+//return account verification email data
+async function verificationMailer (data) {
   return {
     to : data.to,
     from: "mailler@site.org",
@@ -44,10 +46,26 @@ async function mailer (data) {
     }
 }
 
+//return account password reset email data
+async function passwordResetMailer (data) {
+  return {
+    to : data.to,
+    from: "mailler@site.org",
+    subject: "Reset Password",
+    passwordResetLink: data.passwordResetLink
+    }
+}
 module.exports =  class MailService {
   
   static async sendVerificationMail(content) {
-    await mailer(content)
+    await verificationMailer(content)
+      .then(msg => {
+        console.log(msg)
+      })
+      .catch(err => console.log(err))
+  }
+  static async sendPasswordResetMail(content) {
+    await passwordResetMailer(content)
       .then(msg => {
         console.log(msg)
       })
@@ -55,4 +73,3 @@ module.exports =  class MailService {
   }
 }
 
-// MailService.sendVerificationMail({to: "mail.com", verificationLink: "VERIFY/LNK"})

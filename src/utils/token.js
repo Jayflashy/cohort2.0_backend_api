@@ -1,27 +1,30 @@
 const jwt = require('jsonwebtoken')
-const { sendVerificationMail } = require('../modules/auth/mailService')
-const secret = AppConfig.JWTSECRET
+const SECRET = AppConfig.JWTSECRET
+const HOST = AppConfig.HOST
 
 module.exports = {
     generateToken  : async(user) => {
-        token = jwt.sign(user, secret, {expiresIn: "5d"})
+        token = jwt.sign(user, SECRET, {expiresIn: "10 days"}) //token expires in 10 days
         return token
     },
 
-    //link expires in 5 minute
     generateEmailVerificationLink : async (user) => {
-        verificationLink = jwt.sign(user, secret, { expiresIn: "5m"})
+        link = jwt.sign(user, SECRET, { expiresIn: "1800000"}) //token expires in 30 minutes
+        verificationLink = `${HOST}/auth/verify/${link}`
         return verificationLink
     },
 
     //return user if links is still active
     verifyLink: async (link) => {
-        jwt.verify(link, secret, (err, user) => {
-            if (err){
-                return false
-            }
-            return user
-        })
-    }
+        let user = jwt.verify(link, SECRET )
+        return user
+        
+    },
+
+    generatePasswordResetLink : async (user) => {
+        link = jwt.sign(user, SECRET, { expiresIn: "1800000"}) //token expires in 30 minutes
+        verificationLink = `${HOST}/auth/reset/${link}`
+        return verificationLink
+    },
 
 }

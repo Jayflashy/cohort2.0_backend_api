@@ -1,8 +1,18 @@
-const Ajv = require('ajv')
-const ajv = new Ajv
+const Joi = require('joi')
 
-const validator = async (data, schema) => {
-    const validate = ajv.compile(schema)
-    return validate(data)
-} 
-module.exports = validator
+
+exports.validator = async (data, schema) => {
+    try {
+        let value = await schema.validate(data)
+        return{
+            isValid : true,
+            value
+        }
+    }
+    catch (err) {
+       return {
+        isValid: false,
+        err
+       }
+    }
+}

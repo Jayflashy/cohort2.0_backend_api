@@ -4,7 +4,7 @@ const { authSchema } = require('./schema')
 const authModel = model('auth', authSchema)
 
 module.exports = class Auth {
-    static async create (user) {
+    static async createUser (user) {
         try {
             let newUser = new authModel(user)
             newUser.save()
@@ -19,14 +19,14 @@ module.exports = class Auth {
         }
     }
 
-    static async get(email) {
-        let user = await authModel.findOne({email})
+    static async getUser(email) {
+        let user = await authModel.findOne({ email })
         return user
     }
 
     //query is the search parameter, data is the details to be updadted
-    static async update(filter, update){
-        return await authModel.updateOne(filter, update)
+    static async updateUser(filter, update){
+        return await authModel.updateOne({ filter }, update)
     }
 
 }
