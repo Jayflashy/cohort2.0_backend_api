@@ -1,32 +1,20 @@
-const { model } = require('mongoose')
-const { authSchema } = require('./schema')
-
-const authModel = model('auth', authSchema)
+const {getUser, updateUser, createUser } = require('./repository')
 
 module.exports = class Auth {
     static async createUser (user) {
         try {
-            let newUser = new authModel(user)
-            newUser.save()
-
-            //filter result
-            return {
-                id: newUser._id,
-                email: newUser.email
-            }
+            return await createUser(user)
         } catch (err) {
             console.log(err)
         }
     }
-
+    
     static async getUser(email) {
-        let user = await authModel.findOne({ email })
-        return user
+        return await getUser(email)
     }
 
     //query is the search parameter, data is the details to be updadted
     static async updateUser(filter, update){
-        return await authModel.updateOne({ filter }, update)
+        return await updateUser(filter, update)
     }
-
 }

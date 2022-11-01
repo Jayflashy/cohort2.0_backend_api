@@ -1,8 +1,8 @@
 const { v4 } = require('uuid')
-const { Schema } = require('mongoose')
+const { Schema, model } = require('mongoose')
 const Joi = require('joi')
 
-exports.authSchema = new Schema({
+let schema = new Schema({
     _id:{
         type: String,
         default: v4()
@@ -36,20 +36,4 @@ exports.authValidatorSchema = Joi.object().keys({
                 .required()
 })
 
-exports.emailValidatorSchema = Joi.object().keys({
-    email: Joi.string()
-            .email({ minDomainSegments: 2, tlds: {aloow: ["com", "net" ] } })
-            .required()
-})
-
-exports.passwordValidatorSchema = Joi.object().keys({
-    password: Joi.string()
-                .min(7)
-                .required(),
-
-    confirmPassword: Joi.ref("password")
-})
-
-
-
-
+exports.authSchema = model('auth', schema)
