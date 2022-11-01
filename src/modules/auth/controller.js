@@ -5,59 +5,33 @@ const { generateToken, generateEmailVerificationLink, generatePasswordResetLink,
 const { hashPassword, comparePasswords } = require('../../utils/hasher')
 const  MailService  = require('./mailService')
 
-module.exports = {
-    
-    //user signup handler
-    signup: async (req, res) => {
-        let { email , password } = req.body
 
+
+//user signup handler
+exports.signup = async (req, res) => {
         try {
-            email = email.toLowerCase()
-            let user = { email, password }
-
             //validate user inputs
-            let data = await validator(user, authValidatorSchema)
+            let data = await validator(req.body, authValidatorSchema)
             if (!data.isValid){
                 throw data.error
             }
-            console.log(data)
-
-            // check if user exists
-            let userExists = await Auth.getUser(email)
-            if (userExists){
-                throw new Error("User already exists")
-            }
-
-            //hash password
-            let hashedPassword = await hashPassword(password)
-            user.password = hashedPassword
+            let {email, password} = data.value
             
-            //save details to database
-            user = await Auth.createUser(user)
-
-            //generate verification email
-            let verificationLink = await generateEmailVerificationLink(user)
-            let mailData = {
-                to: user.email,
-                verificationLink
-            }
-            await MailService.sendVerificationMail(mailData)
-            
+            await Auth.createUser(email, password)
             //send success message
             res.status(200).json({
                 success: "Verification mail sent successfully"
             })
-            
         } 
         catch (err) {
-            console.log(err)
             res.status(400).json({error: err.message})
-        }
-        
-    },
+        }        
+}
 
-    //email account verification
-    verifyMail: async(req, res) => {
+
+
+//email account verification
+exports.verifyMail =  async(req, res) => {
         let verificationLink = req.params.link
 
         try {
@@ -81,10 +55,10 @@ module.exports = {
                 error: err.message
             })
         }
-    },
+    }
 
 
-    signin: async (req, res) => {
+exports.signin = async (req, res) => {
         let { email, password } = req.body
 
         try {
@@ -133,14 +107,14 @@ module.exports = {
                 error: err.message
             })
         }
-    },
+    }
 
-    signout: async(req, res) => {
+exports.signout =  async(req, res) => {
         //clear cookies
         res.clearCookie('jwt')
-    },
+}
 
-    forgetPassword: async(req, res) => {
+exports.forgetPassword = async(req, res) => {
         let { email } = req.body
 
         try {
@@ -175,9 +149,9 @@ module.exports = {
                 error: err.message
             })
         }
-    },
+    }
 
-    resetPassword: async(req, res) => {
+exports.resetPassword =  async(req, res) => {
         let passwordResetLink = req.params.link
         let { password } = req.body
 
@@ -214,4 +188,3 @@ module.exports = {
             })
         }
     }
-}

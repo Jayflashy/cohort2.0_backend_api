@@ -11,7 +11,7 @@ const PORT = AppConfig.PORT
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-const swaggerDocument = require('./spec.yaml');
+const swaggerDocument = require('./spec.json');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(authRouter)

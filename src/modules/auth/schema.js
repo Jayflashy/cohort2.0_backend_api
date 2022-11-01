@@ -29,6 +29,7 @@ let schema = new Schema({
 exports.authValidatorSchema = Joi.object().keys({
     email: Joi.string()
             .email({ minDomainSegments: 2, tlds: {allow: ["com", "net" ] } })
+            .lowercase()
             .required(),
 
     password: Joi.string()
