@@ -7,6 +7,7 @@ const MailService = require('./mailService')
 
 
 
+
 //user signup handler
 exports.signup = async (req, res) => {
     try {
@@ -27,6 +28,33 @@ exports.signup = async (req, res) => {
         res.status(400).json({ error: err.message })
     }
 }
+
+exports.forgetPassword = async (req, res) => {
+    let { email } = req.body
+
+    try {
+        //validate user inputs
+        let data = await validator(req.body, emailValidatorSchema)
+        if (!data.isValid) {
+            throw data.error
+        }
+
+        //find email on the db
+        let user = await Auth.getUser(email)
+
+        
+
+        res.status(200).json({
+            success: "Password reset link sent..."
+        })
+
+    } catch (err) {
+        res.status(400).json({
+            error: err.message
+        })
+    }
+}
+
 
 //email account verification
 exports.verifyMail = async (req, res) => {
@@ -111,44 +139,6 @@ exports.signout = async (req, res) => {
     res.clearCookie('jwt')
 }
 
-exports.forgetPassword = async (req, res) => {
-    let { email } = req.body
-
-    try {
-        //validate user inputs
-        let data = await validator(req.body, emailValidatorSchema)
-        if (!data.isValid) {
-            throw data.error
-        }
-
-        //find email on the db
-        let user = await Auth.getUser(email)
-
-        //filter user object
-        user = {
-            id: user._id,
-            email: user.email
-        }
-
-        //generate password reset email
-        let passwordResetLink = await generatePasswordResetLink(user)
-        let mailData = {
-            to: user.email,
-            passwordResetLink
-        }
-        await MailService.sendPasswordResetMail(mailData)
-
-
-        res.status(200).json({
-            success: "Password reset link sent..."
-        })
-
-    } catch (err) {
-        res.status(400).json({
-            error: err.message
-        })
-    }
-}
 
 exports.resetPassword = async (req, res) => {
     //accept the password reset link from the route param
