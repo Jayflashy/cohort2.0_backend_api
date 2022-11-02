@@ -29,33 +29,6 @@ exports.signup = async (req, res) => {
     }
 }
 
-exports.forgetPassword = async (req, res) => {
-    let { email } = req.body
-
-    try {
-        //validate user inputs
-        let data = await validator(req.body, emailValidatorSchema)
-        if (!data.isValid) {
-            throw data.error
-        }
-
-        //find email on the db
-        let user = await Auth.getUser(email)
-
-        
-
-        res.status(200).json({
-            success: "Password reset link sent..."
-        })
-
-    } catch (err) {
-        res.status(400).json({
-            error: err.message
-        })
-    }
-}
-
-
 //email account verification
 exports.verifyMail = async (req, res) => {
     let verificationLink = req.params.link
@@ -137,6 +110,33 @@ exports.signin = async (req, res) => {
 exports.signout = async (req, res) => {
     //clear cookies
     res.clearCookie('jwt')
+}
+
+
+exports.forgetPassword = async (req, res) => {
+    let { email } = req.body
+
+    try {
+        //validate user inputs
+        let data = await validator(req.body, emailValidatorSchema)
+        if (!data.isValid) {
+            throw data.error
+        }
+
+        //find email on the db
+        let user = await Auth.getUser(email)
+
+        
+
+        res.status(200).json({
+            success: "Password reset link sent..."
+        })
+
+    } catch (err) {
+        res.status(400).json({
+            error: err.message
+        })
+    }
 }
 
 
