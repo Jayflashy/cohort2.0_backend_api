@@ -119,7 +119,7 @@ exports.forgetPassword = async(req, res) => {
 
         try {
             //validate user inputs
-            let data = await validator(user, emailValidatorSchema)
+            let data = await validator(req.body, emailValidatorSchema)
             if (!data.isValid){
                 throw data.error
             }
@@ -132,6 +132,7 @@ exports.forgetPassword = async(req, res) => {
                 id: user._id,
                 email: user.email
             }
+
             //generate password reset email
             let passwordResetLink = await generatePasswordResetLink(user)
             let mailData = {
@@ -139,6 +140,7 @@ exports.forgetPassword = async(req, res) => {
                 passwordResetLink
             }
             await MailService.sendPasswordResetMail(mailData)
+            
 
             res.status(200).json({
                 success: "Password reset link sent..."

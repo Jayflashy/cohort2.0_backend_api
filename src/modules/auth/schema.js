@@ -37,4 +37,11 @@ exports.authValidatorSchema = Joi.object().keys({
                 .required()
 })
 
+exports.emailValidatorSchema = Joi.object().keys({
+    email: Joi.string()
+            .email({ minDomainSegments: 2, tlds: {allow: ["com", "net" ] } })
+            .lowercase()
+            .required()
+})
+
 exports.authSchema = model('auth', schema)
