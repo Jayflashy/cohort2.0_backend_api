@@ -1,4 +1,3 @@
-// repository
 const {roleSchema} = require('./schema')
 
 exports.createRole = async (role, description) => {

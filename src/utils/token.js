@@ -16,9 +16,8 @@ module.exports = {
 
     //return user if links is still active
     verifyLink: async (link) => {
-        let user = jwt.verify(link, SECRET )
-        return user
-        
+        let isValid = jwt.verify(link, SECRET )
+        if(isValid) return isValid
     },
 
     generatePasswordResetLink : async (user) => {
