@@ -29,7 +29,7 @@ let schema = new Schema({
 const ajvRoleSchema = {
     type: "object",
     properties: {
-      role: {type: "string", enum: ["user", "admin", "other"]},
+      role: {type: "string", enum: ["user", "medicalAdmin", "platformAdmin"]},
       description: {type: "string"}
     },
     required: ["role"],
