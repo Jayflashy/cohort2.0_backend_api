@@ -1,11 +1,7 @@
 const Role  = require('./model')
-const { validator } = require('../../utils/validator')
 const { ajvErrorHandler } = require('../../utils/ajvErrorHandler')
 const { roleSchemaValidator } = require('./schema')
 
-
-
-//RCreate Role
 exports.createRole = async (req, res) => {
         try {
             let isValid = await roleSchemaValidator(req.body)
