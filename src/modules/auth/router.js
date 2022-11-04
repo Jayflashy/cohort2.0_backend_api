@@ -3,7 +3,7 @@ const { signup, verifyMail, signin, forgetPassword, resetPassword } = require('.
 
 authRouter.post('/auth/signup', signup)
 authRouter.post('/auth/signin', signin)
-authRouter.post('/auth/verify/:link', verifyMail)
+authRouter.get('/auth/verify/:link', verifyMail)
 authRouter.post('/auth/forget', forgetPassword)
 authRouter.post('/auth/reset/:link', resetPassword)
 

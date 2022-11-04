@@ -44,4 +44,11 @@ exports.emailValidatorSchema = Joi.object().keys({
             .required()
 })
 
+exports.passwordValidatorSchema = Joi.object().keys({
+    newPassword: Joi.string()
+            .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)
+            .required()
+})
+
+
 exports.authSchema = model('auth', schema)
