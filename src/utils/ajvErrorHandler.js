@@ -8,6 +8,6 @@ exports.ajvErrorHandler = (error) => {
                 }`
             ] = err.message)
     );
-    
+
     return errorObject;
 };

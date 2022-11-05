@@ -5,7 +5,6 @@ const express = require('express')
 const app = express()
 const authRouter = require('./src/modules/auth/router')
 const roleRouter = require('./src/modules/role/router')
-
 const connectToDB = require('./src/utils/database')
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./spec.json');
