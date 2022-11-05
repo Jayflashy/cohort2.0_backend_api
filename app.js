@@ -4,6 +4,7 @@ const { urlencoded } = require('express')
 const express = require('express')
 const app = express()
 const authRouter = require('./src/modules/auth/router')
+const roleRouter = require('./src/modules/role/router')
 const connectToDB = require('./src/utils/database')
 const swaggerUi = require('swagger-ui-express');
 
@@ -14,7 +15,8 @@ app.use(express.urlencoded({ extended: false }))
 const swaggerDocument = require('./spec.json');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use(authRouter)
+app.use('/auth', authRouter)
+app.use('/role', roleRouter)
 
 app.get('/', (req,res) => {
     res.send('Everything works pretty well 🚀, powered by Top Universe')
