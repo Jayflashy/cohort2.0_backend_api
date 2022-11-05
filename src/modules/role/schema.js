@@ -2,6 +2,8 @@ const { v4 } = require('uuid')
 const { Schema, model } = require('mongoose')
 const Ajv = require("ajv")
 const ajv = new Ajv({allErrors: true})
+require("ajv-formats")(ajv)
+
 
 let schema = new Schema({
     _id:{
@@ -12,7 +14,7 @@ let schema = new Schema({
         type: String,
         required: true,
     },
-    role:{ 
+    email:{ 
         type: String,
         required: true,
     },
@@ -30,12 +32,15 @@ const ajvRoleSchema = {
     type: "object",
     properties: {
       role: {type: "string", enum: ["user", "medicalAdmin", "platformAdmin"]},
-      description: {type: "string"}
+      description: {type: "string"},
+      email: {type: "string", format: "email"}
     },
-    required: ["role"],
+    required: ["role", "email"],
     additionalProperties: false
   }
 
-exports.roleSchemaValidator = ajv.compile(ajvRoleSchema)
+const roleSchemaValidator = ajv.compile(ajvRoleSchema)
 
-exports.roleSchema = model('role', schema)
+const roleSchema = model("role", schema)
+
+module.exports = { roleSchema, roleSchemaValidator };

@@ -1,20 +1,40 @@
 const {roleSchema} = require('./schema')
 
-exports.createRole = async (role, description) => {
+exports.createRole = async (role, email, description) => {
     let Role = {
         role,
+        email,
         description
     }
     
     let newRole = new roleSchema(Role)
-    
     return await newRole.save()
 }
 
-exports.getRole = async (role) => {
-    return await roleSchema.findOne({role})
+
+exports.getRole = async (role, email) => {
+    let user = await roleSchema.findOne({ email })
+    
+    if (user) {
+        if (user.role = role)
+        {
+            return false
+        }
+    }
+    return true
+   
 }
 
-exports.getAllRoles = async () => {
-    return await roleSchema.find();
+exports.checkRole = async (role, email) => {
+    let user = await roleSchema.findOne({ email })
+    
+    if (!user) {
+        return false
+    }
+
+    if (user) {
+        if (user.role === role && user.email === email)
+        return user
+    }
+
 }
