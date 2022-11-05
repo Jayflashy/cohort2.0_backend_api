@@ -3,7 +3,7 @@ const { createRole, findAllRole, verifyRole, deleteRole } = require('./controlle
 
 roleRouter.post('/role/create', createRole)
 roleRouter.post('/role/verify', verifyRole)
-roleRouter.get('/role/delete/:id', deleteRole)
+roleRouter.delete('/role/delete/:id', deleteRole)
 
 
 
