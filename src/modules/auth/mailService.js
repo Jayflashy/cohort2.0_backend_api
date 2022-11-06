@@ -60,7 +60,7 @@ async function updateMailer (data) {
   return {
     to : data.to,
     from: "mailler@site.org",
-    subject: "Reset Password",
+    subject: "Update Role",
     upadateResetLink: data.upadateResetLink
     }
 }
@@ -70,7 +70,7 @@ async function deleteMailer (data) {
   return {
     to : data.to,
     from: "mailler@site.org",
-    subject: "Reset Password",
+    subject: "Delete Role",
     deletRoleLink: data.deletRoleLink
     }
 }
