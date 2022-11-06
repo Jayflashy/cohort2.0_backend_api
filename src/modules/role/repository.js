@@ -38,3 +38,19 @@ exports.checkRole = async (role, email) => {
     }
 
 }
+exports.updateRole = async (role, email) => {
+    let update = newRole
+    
+    if( !newRole){ 
+        return false
+    }
+    if(newRole){
+        if(update.role === role && update.email === email){
+            return await update.save();
+        }
+    }
+       
+        
+    
+
+}

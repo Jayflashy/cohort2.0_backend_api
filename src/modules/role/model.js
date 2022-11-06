@@ -1,10 +1,10 @@
-const { createRole, getRole, getAllRoles, checkRole } = require('./repository')
+const { createRole, getRole, getAllRoles, checkRole, updateRole } = require('./repository')
 
 module.exports = class Role {
     static async createRole (role, email, description) {
             const existingRole = await Role.checkRole(role, email)
             if (!existingRole){
-                throw new Error("User with he same Role already exists")
+                throw new Error("User with he same role already exists")
             }
             
             return await createRole(role, email, description)
@@ -29,4 +29,15 @@ module.exports = class Role {
         }
         return user
     }
+    static async updateRole (role, email){
+        let update = await updateRole(role, email)
+        if(!user){
+            return false
+        }
+        if(user){
+            return true
+        }
+         await update()
+    } 
+
 }

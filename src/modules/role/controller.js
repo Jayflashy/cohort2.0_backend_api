@@ -94,3 +94,13 @@ exports.verifyRole = async (req, res) => {
             res.status(400).send(err.message);
     }
 };
+// i dont know if these changes will work, its currently untested
+exports.updateRole = async (req, res) =>{
+    try{
+        let update = req.body;
+        await user.newRole(user,update)
+    }
+    catch(err){
+        res.status(400).send(err.message)
+    }
+};
