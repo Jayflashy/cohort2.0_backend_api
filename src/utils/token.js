@@ -26,4 +26,15 @@ module.exports = {
         return verificationLink
     },
 
+    generateUpadateResetLink : async (user) => {
+        link = jwt.sign(user, SECRET, { expiresIn: "1800000"}) //token expires in 30 minutes
+        verificationLink = `${HOST}/role/update/${link}`
+        return verificationLink
+    },
+    generateDeleteRoleLink : async (user) => {
+        link = jwt.sign(user, SECRET, { expiresIn: "1800000"}) //token expires in 30 minutes
+        verificationLink = `${HOST}/role/delete/${link}`
+        return verificationLink
+    }
+
 }
