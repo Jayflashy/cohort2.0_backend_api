@@ -10,7 +10,7 @@ exports.updateUser = async (filter, update) => {
     return await authSchema.updateOne({ filter }, update)
 }
 
-exports.createUser = async (email, password) => {
+exports.createnewUser = async (email, password) => {
     let user = {
         email,
         password
