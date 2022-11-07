@@ -7,11 +7,11 @@ const { signupProfile, readUserProfile  } = require('../profile/profileControlle
 const { grantAccess, allowIfLoggedin, checkJWT } = require('../authorisation/middleware')
 
 
-authRouter.post('/auth/signup', signup)
-authRouter.post('/auth/signin', signin)
-authRouter.get('/auth/verify/:link', verifyMail)
-authRouter.post('/auth/forget', forgetPassword)
-authRouter.post('/auth/reset/:link', resetPassword)
+authRouter.post('/signup', signup)
+authRouter.post('/signin', signin)
+authRouter.post('/verify/:link', verifyMail)
+authRouter.post('/forget', forgetPassword)
+authRouter.post('/reset/:link', resetPassword)
 
 //for profile
 authRouter.get('/auth/user/profile/:id',checkJWT,grantAccess('readOwn', 'profile'), readUserProfile)

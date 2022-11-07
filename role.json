@@ -1,0 +1,88 @@
+{
+  "openapi": "3.0.0",
+  "x-stoplight": {
+    "id": "glcbiwgcgtfr6"
+  },
+  "info": {
+    "title": "RoleApi",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/"
+    }
+  ],
+  "paths": {
+    "/verify": {
+      "post": {
+        "summary": "verify_role",
+        "tags": [
+          "authorisation"
+        ],
+        "responses": {},
+        "operationId": "post-auth-verifyRole",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "x-examples": {
+                  "example-1": {
+                    "email": "string",
+                    "role": "string"
+                  }
+                },
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "role": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "role"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "title": "User",
+        "type": "object",
+        "description": "",
+        "x-examples": {
+          "Alice Smith": {
+            "id": 142,
+            "firstName": "Alice",
+            "lastName": "Smith",
+            "email": "alice.smith@gmail.com",
+            "dateOfBirth": "1997-10-31",
+            "emailVerified": true,
+            "signUpDate": "2019-08-24"
+          }
+        },
+        "properties": {
+          "role": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "required": [
+          "email",
+          "role"
+        ]
+      }
+    }
+  }
+}

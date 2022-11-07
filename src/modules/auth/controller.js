@@ -13,6 +13,7 @@ const { createJWT } = require('../authorisation/middleware');
 
 
 
+
 //user signup handler
 exports.signup = async (req, res) => {
     try {
@@ -134,6 +135,7 @@ exports.signout = async (req, res) => {
     res.clearCookie('jwt')
 }
 
+
 exports.forgetPassword = async (req, res) => {
     let { email } = req.body
 
@@ -147,20 +149,7 @@ exports.forgetPassword = async (req, res) => {
         //find email on the db
         let user = await Auth.getUser(email)
 
-        //filter user object
-        user = {
-            id: user._id,
-            email: user.email
-        }
-
-        //generate password reset email
-        let passwordResetLink = await generatePasswordResetLink(user)
-        let mailData = {
-            to: user.email,
-            passwordResetLink
-        }
-        await MailService.sendPasswordResetMail(mailData)
-
+        
 
         res.status(200).json({
             success: "Password reset link sent..."
@@ -172,6 +161,7 @@ exports.forgetPassword = async (req, res) => {
         })
     }
 }
+
 
 exports.resetPassword = async (req, res) => {
     //accept the password reset link from the route param

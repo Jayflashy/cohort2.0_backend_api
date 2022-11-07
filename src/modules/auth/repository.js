@@ -9,6 +9,7 @@ exports.getUserProfile = async (userId) => {
     return await authSchema.findOne({ userId})
 }
 
+<<<<<<< HEAD
 //query is the search parameter, data is the details to be updated
 exports.updateUser = async (filter, update) => {
     await User.findByIdAndUpdate(userId, update);
@@ -27,6 +28,9 @@ exports.updateUser = async (filter, update) => {
 }
 
 exports.createNewUser = async (email, password, role ) => {
+=======
+exports.createnewUser = async (email, password) => {
+>>>>>>> cc290375fba12ce86247e26b4138b36e04b0ee6f
     let user = {
         email,
         password,
