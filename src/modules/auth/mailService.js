@@ -55,6 +55,28 @@ async function passwordResetMailer (data) {
     passwordResetLink: data.passwordResetLink
     }
 }
+//return account update email data
+async function updateMailer (data) {
+  return {
+    to : data.to,
+    from: "mailler@site.org",
+    subject: "Update Role",
+    upadateResetLink: data.upadateResetLink
+    }
+}
+
+//return account update email data
+async function deleteMailer (data) {
+  return {
+    to : data.to,
+    from: "mailler@site.org",
+    subject: "Delete Role",
+    deletRoleLink: data.deletRoleLink
+    }
+}
+
+
+
 module.exports =  class MailService {
   
   static async sendVerificationMail(content) {
@@ -71,5 +93,21 @@ module.exports =  class MailService {
       })
       .catch(err => console.log(err))
   }
+  static async sendUpdateResetMail(content) {
+    await updateMailer(content)
+      .then(msg => {
+        console.log(msg)
+      })
+      .catch(err => console.log(err))
+  }
+  static async sendDeleteResetMail(content) {
+    await deleteMailer(content)
+      .then(msg => {
+        console.log(msg)
+      })
+      .catch(err => console.log(err))
+  }
+
 }
+
 

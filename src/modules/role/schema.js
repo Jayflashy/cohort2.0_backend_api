@@ -39,8 +39,34 @@ const ajvRoleSchema = {
     additionalProperties: false
   }
 
+  const roleValidatetor = {
+    type: "object",
+    properties: {
+      role: {type: "string", enum: ["user", "medicalAdmin", "platformAdmin"]},
+      _id: {type: "string"},
+      email: {type: "string", format: "email"}
+    },
+    required: ["role", "_id", "email"],
+    additionalProperties: false
+  }
+
+  const roleDelete = {
+    type: "object",
+    properties: {
+      role: {type: "string", enum: ["user", "medicalAdmin", "platformAdmin"]},
+      email: {type: "string", format: "email"}
+    },
+    required: ["role", "email"],
+    additionalProperties: false
+  }
+
+  const roleValidator = ajv.compile(roleValidatetor)
+  
+  const deleteRoleValidator = ajv.compile(roleDelete)
+
+
 const roleSchemaValidator = ajv.compile(ajvRoleSchema)
 
 const roleSchema = model("role", schema)
 
-module.exports = { roleSchema, roleSchemaValidator };
+module.exports = { roleSchema, roleSchemaValidator, roleValidator, deleteRoleValidator };

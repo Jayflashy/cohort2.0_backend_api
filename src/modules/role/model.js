@@ -1,4 +1,7 @@
-const { createRole, getRole, getAllRoles, checkRole } = require('./repository')
+const { createRole, getRole, getAllRoles, checkRole, validUser, updateUser, roleDel, delRole } = require('./repository')
+const {  generateUpadateResetLink, generateDeleteRoleLink} = require('../../utils/token')
+const  MailService  = require('../auth/mailService')
+
 
 module.exports = class Role {
     static async createRole (role, email, description) {
@@ -28,5 +31,55 @@ module.exports = class Role {
             return false
         }
         return user
+    }
+
+    static async validateUser(id, email) {
+        let user = await validUser( id, email ) 
+        if (user) {
+           const payload = {
+                id: user._id,
+                email: user.email
+            }
+            let upadateResetLink = await generateUpadateResetLink(payload)
+            let mailData = {
+                to: user.email,
+                upadateResetLink
+            }
+             await MailService.sendUpdateResetMail(mailData)
+            return true
+        }
+        return false
+    }
+
+    static async deletRole(id, email) {
+        let user = await delRole( id, email ) 
+
+        if (user) {
+           const payload = {
+                id: user._id,
+                email: user.email
+            }
+            let deletRoleLink = await generateDeleteRoleLink(payload)
+            let mailData = {
+                to: user.email,
+                deletRoleLink
+            }
+             await MailService.sendDeleteResetMail(mailData)
+            return true
+        }
+        return false
+    }
+
+
+    //query is the search parameter, data is the details to be updadted
+       static async updateUser(filter, update){
+        
+        return await updateUser(filter, update)
+    }
+
+       //query is the search parameter, data is the details to be updadted
+       static async roleDelete(filter, update){
+        
+        return await roleDel(filter, update)
     }
 }
