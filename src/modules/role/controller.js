@@ -94,3 +94,28 @@ exports.verifyRole = async (req, res) => {
             res.status(400).send(err.message);
     }
 };
+
+// delete Role
+exports.deleteRole = async (req, res) => {
+    try {
+        //get id from params
+
+        let { id } = req.params;
+        
+        // check if Role exists
+        const checkRole = await Role.findOne({id})
+        if(!checkRole){
+            throw new Error("Role with selected id does not exist.");
+        }
+        // delete role
+        checkRole.delete()
+        res.status(200).send("Role has been deleted");
+    } 
+
+    //catches any error thrown on course of the validation and verification 
+    //if there is any and sends it to the frontend
+
+    catch (err) {
+        res.status(400).send(err.message);
+    }
+};
