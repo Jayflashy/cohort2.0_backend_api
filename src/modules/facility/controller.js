@@ -14,7 +14,7 @@ const { createJWT } = require('../authorisation/middleware');
 
 
 //user signup handler
-exports.signup = async (req, res) => {
+exports.createFacility = async (req, res) => {
     try {
         //validate user inputs
         let data = await validator(req.body, authValidatorSchema)
@@ -22,19 +22,9 @@ exports.signup = async (req, res) => {
             throw data.error
         }
 
-        //if role was parse as input in the form (for admin form)
-        if(data.value.role) {
-            let { email, password, role} = data.value
-            await Auth.createUser(email, password, role)
-            return res.status(200).json({
-                success: "Admin verification mail sent successfully"
-            })
-        }
-          //end
-
         let { email, password} = data.value
 
-        await Auth.createUser(email, password)
+        await Auth.createFacility(email, password)
         //send success message
         res.status(200).json({
             success: "Verification mail sent successfully"

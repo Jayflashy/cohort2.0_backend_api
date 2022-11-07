@@ -1,8 +1,9 @@
 const { v4 } = require('uuid')
-const { Schema, model } = require('mongoose')
-const Joi = require('joi')
+const mongoose = require('mongoose')
+const auth = require('../auth/schema')
+const Joi = require('joi');
 
-let schema = new Schema({
+let schema = new mongoose.Schema({
     _id:{
         type: String,
         default: v4()
@@ -10,6 +11,7 @@ let schema = new Schema({
     email:{ 
         type: String,
         required: true,
+        trim: true
 
     },
     password:{ 
@@ -19,7 +21,11 @@ let schema = new Schema({
     status: {
         type: String,
         default: "pending"
-    }
+    },
+    role: {
+        type: String,
+        enum: ["user", "admin"]
+       }
 },
 {
     timestamps: true
@@ -51,4 +57,4 @@ exports.passwordValidatorSchema = Joi.object().keys({
 })
 
 
-exports.authSchema = model('auth', schema)
+exports.authSchema = mongoose.model('auth', schema)

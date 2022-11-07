@@ -42,19 +42,6 @@ exports.createNewUser = async (email, password, role ) => {
         email: newUser.email
     }
 }
-exports.createNewProfile = async (profileObj ) => {
-    let newUserProfile = new profileSchema(profileObj)
-    newUserProfile.save()
-    //filter result
-    return {
-        id: newUserProfile._id,
-        first_name: newUser.first_name,
-        middle_name:newUser.middle_name,
-        last_name: newUser.last_name,
-        country:newUser.country,
-        location:newUser.location,
-        phone:newUser.phone
-    }
-}
+
 
 exports.deleteNewUser = async (id ) => {}
