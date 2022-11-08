@@ -15,7 +15,6 @@ const PORT = AppConfig.PORT
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-<<<<<<< HEAD
 //checking for expired token
 app.use(async (req, res, next) => {
     if (req.headers["x-access-token"]) {
@@ -35,8 +34,6 @@ app.use(async (req, res, next) => {
   });
 
 const swaggerDocument = require('./spec.json');
-=======
->>>>>>> cc290375fba12ce86247e26b4138b36e04b0ee6f
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api-role', swaggerUi.serve, swaggerUi.setup(swaggerRoleDocument));
 
