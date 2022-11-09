@@ -4,7 +4,10 @@
   "description": "Cohort 2.0 Backend Project API Codebase",
   "main": "app.js",
   "scripts": {
+<<<<<<< HEAD
+=======
     "test": "echo \"Error: no test specified\" && exit 1",
+>>>>>>> cc290375fba12ce86247e26b4138b36e04b0ee6f
     "dev": "nodemon app.js"
   },
   "repository": {
@@ -18,10 +21,14 @@
   },
   "homepage": "https://github.com/top-universe/cohort2.0_backend_api#readme",
   "engines": {
-    "node": ">=16.17.1 <18.9.0"
+    "node": ">=18.12.0"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
+<<<<<<< HEAD
+    "accesscontrol": "^2.2.1",
+=======
+>>>>>>> cc290375fba12ce86247e26b4138b36e04b0ee6f
     "ajv": "^8.11.0",
     "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
@@ -31,7 +38,7 @@
     "jsonwebtoken": "^8.5.1",
     "mailgen": "^2.0.27",
     "mailgun.js": "^8.0.2",
-    "mongoose": "^6.7.0",
+    "mongoose": "^6.7.1",
     "nodemon": "^2.0.20",
     "swagger-ui-express": "^4.5.0",
     "uuid": "^9.0.0"

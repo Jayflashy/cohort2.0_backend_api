@@ -9,7 +9,6 @@ exports.getUserProfile = async (userId) => {
     return await authSchema.findOne({ userId})
 }
 
-<<<<<<< HEAD
 //query is the search parameter, data is the details to be updated
 exports.updateUser = async (filter, update) => {
     await User.findByIdAndUpdate(userId, update);
@@ -28,9 +27,6 @@ exports.updateUser = async (filter, update) => {
 }
 
 exports.createNewUser = async (email, password, role ) => {
-=======
-exports.createnewUser = async (email, password) => {
->>>>>>> cc290375fba12ce86247e26b4138b36e04b0ee6f
     let user = {
         email,
         password,
@@ -46,19 +42,6 @@ exports.createnewUser = async (email, password) => {
         email: newUser.email
     }
 }
-exports.createNewProfile = async (profileObj ) => {
-    let newUserProfile = new profileSchema(profileObj)
-    newUserProfile.save()
-    //filter result
-    return {
-        id: newUserProfile._id,
-        first_name: newUser.first_name,
-        middle_name:newUser.middle_name,
-        last_name: newUser.last_name,
-        country:newUser.country,
-        location:newUser.location,
-        phone:newUser.phone
-    }
-}
+
 
 exports.deleteNewUser = async (id ) => {}

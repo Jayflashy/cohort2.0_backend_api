@@ -7,5 +7,7 @@
     HOST: process.env.HOST || 'http://localhost:3000',
     DBURL: process.env.DBURL || 'mongodb://localhost:27017',
     JWTSECRET: process.env.JWTSECRET || 'topuniversesecretkey',
-    MAILGUN_API_KEY: process.env.MAILGUN_API_KEY
+    MAILGUN_API_KEY: process.env.MAILGUN_API_KEY,
+    SECRET: process.env.SECRET
+    
 }

@@ -13,9 +13,8 @@ const { createJWT } = require('../authorisation/middleware');
 
 
 
-
 //user signup handler
-exports.signup = async (req, res) => {
+exports.createFacility = async (req, res) => {
     try {
         //validate user inputs
         let data = await validator(req.body, authValidatorSchema)
@@ -23,19 +22,9 @@ exports.signup = async (req, res) => {
             throw data.error
         }
 
-        //if role was parse as input in the form (for admin form)
-        if(data.value.role) {
-            let { email, password, role} = data.value
-            await Auth.createUser(email, password, role)
-            return res.status(200).json({
-                success: "Admin verification mail sent successfully"
-            })
-        }
-          //end
-
         let { email, password} = data.value
 
-        await Auth.createUser(email, password)
+        await Auth.createFacility(email, password)
         //send success message
         res.status(200).json({
             success: "Verification mail sent successfully"
@@ -135,7 +124,6 @@ exports.signout = async (req, res) => {
     res.clearCookie('jwt')
 }
 
-
 exports.forgetPassword = async (req, res) => {
     let { email } = req.body
 
@@ -149,7 +137,20 @@ exports.forgetPassword = async (req, res) => {
         //find email on the db
         let user = await Auth.getUser(email)
 
-        
+        //filter user object
+        user = {
+            id: user._id,
+            email: user.email
+        }
+
+        //generate password reset email
+        let passwordResetLink = await generatePasswordResetLink(user)
+        let mailData = {
+            to: user.email,
+            passwordResetLink
+        }
+        await MailService.sendPasswordResetMail(mailData)
+
 
         res.status(200).json({
             success: "Password reset link sent..."
@@ -161,7 +162,6 @@ exports.forgetPassword = async (req, res) => {
         })
     }
 }
-
 
 exports.resetPassword = async (req, res) => {
     //accept the password reset link from the route param
