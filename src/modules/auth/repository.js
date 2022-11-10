@@ -19,6 +19,7 @@ exports.updateUser = async (filter, update) => {
 }
 
 exports.createNewUser = async (email, password, role ) => {
+    try{
     let user = {
         email,
         password,
@@ -33,6 +34,10 @@ exports.createNewUser = async (email, password, role ) => {
         id: newUser._id,
         email: newUser.email
     }
+} catch(err) {
+    console.log(err.message)
+    throw new Error(err.message)
+}
 }
 exports.createNewProfile = async (profileObj ) => {
     let newUserProfile = new profileSchema(profileObj)

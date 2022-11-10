@@ -6,7 +6,7 @@ const Joi = require('joi');
 let schema = new mongoose.Schema({
     _id:{
         type: String,
-        default: v4()
+        default: () => v4()
     },
     email:{ 
         type: String,
