@@ -6,6 +6,14 @@ const app = express()
 const connectToDB = require('./src/utils/database')
 connectToDB()
 
+const cors = require("cors");
+
+app.use(cors({
+    origin: ["http://127.0.0.1:5173"],
+    optionsSuccessStatus: 200,
+}));
+
+
 const PORT = AppConfig.PORT
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -26,7 +34,7 @@ app.use(async (req, res, next) => {
     } else {
      next();
     }
-  });
+});
 
 
 // routers
