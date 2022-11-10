@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 const {getUser, updateUser, createNewUser } = require('./repository')
-=======
-const {getUser, updateUser, createnewUser } = require('./repository')
->>>>>>> cc290375fba12ce86247e26b4138b36e04b0ee6f
 const { hashPassword, comparePasswords } = require('../../utils/hasher')
 const { generateToken, generateEmailVerificationLink, generatePasswordResetLink, verifyLink } = require('../../utils/token')
 const  MailService  = require('./mailService')
@@ -20,11 +16,8 @@ module.exports = class Auth {
             let hashedPassword = await hashPassword(password)
             
             //save details to database
-<<<<<<< HEAD
             let user = await createNewUser(email, hashedPassword, role)
-=======
-            let user = await createnewUser(email, hashedPassword)
->>>>>>> cc290375fba12ce86247e26b4138b36e04b0ee6f
+            console.log(user)
         
             //generate verification email
             let verificationLink = await generateEmailVerificationLink(user)
@@ -33,7 +26,7 @@ module.exports = class Auth {
                 verificationLink
             }
 
-            await MailServic.sendVerificationMail(mailData)
+            await MailService.sendVerificationMail(mailData)
     }
     static async createUserProfile (profileObj) {
         let userprofileExists = await Auth.getUserProfile(profileObj._Id)
@@ -48,12 +41,8 @@ module.exports = class Auth {
         
     }
 
-<<<<<<< HEAD
-    static async getUser(email) {
-=======
-    
+
     static async checkUser(email) {
->>>>>>> cc290375fba12ce86247e26b4138b36e04b0ee6f
         return await getUser(email)
     }
     

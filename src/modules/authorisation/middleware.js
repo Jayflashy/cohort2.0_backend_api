@@ -3,6 +3,7 @@ const bcrypt =require('bcrypt');
 const { roles } = require('./roles');
 const Ajv = require("ajv");
 
+// BAD CODE: VULNERABLE
 exports.grantAccess = function(action, resource) {
  return async (req, res, next) => {
   try {
@@ -17,7 +18,8 @@ exports.grantAccess = function(action, resource) {
   }
  }
 }
- 
+
+
 exports.allowIfLoggedin = async (req, res, next) => {
  try {
   const user = res.locals.loggedInUser;
@@ -32,19 +34,23 @@ exports.allowIfLoggedin = async (req, res, next) => {
   }
 }
 
+// function to compare password
 exports.comparePassword = (password, hash) => {
     return bcrypt.compareSync(password, hash);
 }
 
+// function hash user password
 exports.hashPassword = (password) => {
     return bcrypt.hashSync(password, 8);
 }
 
+// function to create JWT
 exports.createJWT = (user) => {
     const token = jwt.sign({id:user.id, username: user.username}, process.env.JWT_SECRET)
     return token;
 }
 
+// function to check parsed JWT
 exports.checkJWT = (req, res, next) => {
     const bearer = req.headers.authorization;
 
@@ -75,8 +81,9 @@ exports.checkJWT = (req, res, next) => {
     }
 }
 
-exports.ajvChecker = (data)=> {
 
+// BAD CODE: statically typed values
+exports.ajvChecker = (data)=> {
   let schema = {
       type: "object",
       properties: {
@@ -96,8 +103,4 @@ exports.ajvChecker = (data)=> {
 
   return result;
  
-}
-
-exports.profileValidatorSchema = () => {
-
 }

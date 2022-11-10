@@ -3,13 +3,8 @@ require('./src/utils/config')
 const { urlencoded } = require('express')
 const express = require('express')
 const app = express()
-const authRouter = require('./src/modules/auth/router')
-const roleRouter = require('./src/modules/role/router')
 const connectToDB = require('./src/utils/database')
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./spec.json');
-const swaggerRoleDocument = require('./role.json');
-
+connectToDB()
 
 const PORT = AppConfig.PORT
 app.use(express.json())
@@ -33,49 +28,24 @@ app.use(async (req, res, next) => {
     }
   });
 
+
+// routers
+const auth = require('./src/modules/auth/router'),
+    role = require('./src/modules/role/router'),
+    booking = require('./src/modules/booking/router'),
+    profile = require('./src/modules/profile/router')
+
+app.use(auth, role, booking, profile)
+
+
+// swagger documentation
+const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./spec.json');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use('/api-role', swaggerUi.serve, swaggerUi.setup(swaggerRoleDocument));
 
-app.use(authRouter)
-app.use(roleRouter)
 
 app.get('/', (req,res) => {
     res.send('Everything works pretty well 🚀, powered by TopUniverse')
 })
 
-//connect to database
-connectToDB()
-    .then(()=> {
-        app.listen(PORT, () =>{
-            console.log(`App is running on port ${PORT}`)
-        })
-})
-
-
-// implement dependency injection
-// function mongoDatabase() {
-    
-//     return true
-// }
-
-// function postresDatabase() {
-    
-//     return true
-// }
-
-// function postresDatabase() {
-    
-//     return true
-// }
-
-
-// function runApp(database) {
-//     if(database) {
-//         app.listen(PORT, () =>{
-//             console.log(`App is running on port ${PORT}`)
-//         })
-//     }
-// }
-
-// runApp(postgres)
+app.listen(PORT, () =>  console.log(`App is running on port ${PORT}`))

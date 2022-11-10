@@ -23,20 +23,21 @@ exports.signup = async (req, res) => {
             throw data.error
         }
 
+        //BAD CODE: very terible implementation of admin role
         //if role was parse as input in the form (for admin form)
-        if(data.value.role) {
-            let { email, password, role} = data.value
-            await Auth.createUser(email, password, role)
-            return res.status(200).json({
-                success: "Admin verification mail sent successfully"
-            })
-        }
-          //end
+        // if(data.value.role) {
+        //     let { email, password, role} = data.value
+        //     await Auth.createUser(email, password, role)
+        //     return res.status(200).json({
+        //         success: "Admin verification mail sent successfully"
+        //     })
+        // }
+        
 
         let { email, password} = data.value
 
         await Auth.createUser(email, password)
-        //send success message
+        // send success message
         res.status(200).json({
             success: "Verification mail sent successfully"
         })
@@ -53,7 +54,6 @@ exports.verifyMail = async (req, res) => {
 
     try {
         let user = await verifyLink(verificationLink)
-        console.log(user)//log
         if (!user) {
             throw new Error("Link expired")
         }

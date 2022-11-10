@@ -9,28 +9,16 @@ exports.getUserProfile = async (userId) => {
     return await authSchema.findOne({ userId})
 }
 
-<<<<<<< HEAD
 //query is the search parameter, data is the details to be updated
 exports.updateUser = async (filter, update) => {
-    await User.findByIdAndUpdate(userId, update);
-     const user = await User.findById(userId)
-     if(user) {
-        return res.status(200).json({
-            data: user,
-            message: 'User has been updated'
-           });
-     } 
-
-     return res.json({
-        data: user,
-        message: 'User does not exit'
-       });
+    const user = await authSchema.findOneAndUpdate(filter, update);
+     if(!user) {
+        throw new Error('User does not exit')
+    }
+    return user
 }
 
 exports.createNewUser = async (email, password, role ) => {
-=======
-exports.createnewUser = async (email, password) => {
->>>>>>> cc290375fba12ce86247e26b4138b36e04b0ee6f
     let user = {
         email,
         password,

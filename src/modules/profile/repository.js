@@ -1,21 +1,10 @@
 // repository
 const {authSchema} = require('../auth/schema');
-const Profile = require('./ProfileSchema');
+const Profile = require('./schema');
 
-exports.getUsersProfile = async () => {
-    let profiles =  await Profile.find({})
-    if(profiles) {
-        return res.status(200).json({profiles});
-     } 
-
-     return res.json({
-        data: user,
-        message: 'Profile does not exit'
-       });
-}
-
+// get user profile using 
 exports.getUserProfile = async (user) => {
-    let profile =  await Profile.findOne( user);
+    let profile =  await Profile.findOne(user);
     if(profile) {
         return res.status(200).json({profile});
      } 
@@ -43,7 +32,7 @@ exports.createNewProfile = async (data ) => {
 
 }
 
-exports.updateUser = async (id, data) => {
+exports.updateProfile = async (id, data) => {
     let profile =  await Profile.findByIdAndUpdate( id, data);
 
     if(profile) {
@@ -59,7 +48,7 @@ exports.updateUser = async (id, data) => {
        });
 }
 
-exports.deleteNewUser = async (id ) => {
+exports.deleteProfile = async (id ) => {
     let profile =  await Profile.findByIdAndDelete( id);
     
     if(profile) {

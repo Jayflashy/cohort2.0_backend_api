@@ -1,4 +1,4 @@
-const Profile = require('./profileModel')
+const Profile = require('./model')
 const { validator } = require('../../utils/validator')
 const { createJWT, ajvChecker, profileValidatorSchema } = require('./middleware');
 

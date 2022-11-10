@@ -1,14 +1,14 @@
 const Auth = require('./model')
-const { validator } = require('../../utils/validator')
+const { validator } = require('../../src/utils/validator')
 const { authValidatorSchema, 
     emailValidatorSchema, 
     passwordValidatorSchema } = require('./schema')
 const { generateToken, 
     generateEmailVerificationLink, 
-    generatePasswordResetLink, verifyLink } = require('../../utils/token')
-const { hashPassword, comparePasswords } = require('../../utils/hasher')
+    generatePasswordResetLink, verifyLink } = require('../../src/utils/token')
+const { hashPassword, comparePasswords } = require('../../src/utils/hasher')
 const MailService = require('./mailService')
-const { createJWT } = require('../authorisation/middleware');
+const { createJWT } = require('../../src/modules/authorisation/middleware');
 
 
 

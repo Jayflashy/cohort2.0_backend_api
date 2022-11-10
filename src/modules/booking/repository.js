@@ -1,5 +1,5 @@
 // repository
-const Booking = require('./bookingSchema')
+const Booking = require('./schema')
 
 exports.getBooking = async (email) => {
     return await Booking.findOne({ email })
